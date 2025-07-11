@@ -21,9 +21,21 @@ type -a rbenv > /dev/null && eval "$(rbenv init -)"
 export PATH="${HOME}/.pyenv/bin:${PATH}" # Needed for Linux/WSL
 type -a pyenv > /dev/null && eval "$(pyenv init -)" && eval "$(pyenv virtualenv-init -)"
 
+<<<<<<< Updated upstream
 # Load nvm if installed (To manage your Node versions)
 export NVM_DIR="$HOME/.nvm"
 [ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"
+=======
+# Node (nvm)
+# export NVM_DIR="$HOME/.nvm"
+# [ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"
+# [ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"
+export NVM_DIR="$HOME/.nvm"
+# Load nvm itself
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+# (optional) Load nvm’s bash_completion
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+>>>>>>> Stashed changes
 
 # Rails and Ruby uses the local `bin` folder to store binstubs.
 # So instead of running `bin/rails` like the doc says, just run `rails`
