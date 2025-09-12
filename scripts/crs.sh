@@ -56,3 +56,8 @@ echo "  krs  # Kill Rails server only"
 echo "  kvs  # Kill Vite server only"
 echo "  rvs  # Start just Vite server"
 echo "  kas  # Kill all servers"
+
+echo ""
+echo "📋 To view server logs:"
+echo "  tail -f /tmp/rails.log  # Rails server"
+echo "  tail -f /tmp/vite.log   # Vite server"
