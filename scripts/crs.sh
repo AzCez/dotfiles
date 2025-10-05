@@ -25,6 +25,28 @@ else
 fi
 
 echo ""
+# Check Redis server
+REDIS_RUNNING=false
+if lsof -i :6379 >/dev/null 2>&1; then
+    PID=$(lsof -ti :6379 | head -1)
+    echo "✅ Redis server (port 6379): Running. PID $PID."
+    REDIS_RUNNING=true
+else
+    echo "❌ Redis server (port 6379): Not running"
+fi
+
+echo ""
+# Check Sidekiq workers
+SIDEKIQ_RUNNING=false
+SIDEKIQ_PID=$(ps aux | grep "[s]idekiq" | awk '{print $2}' | head -1)
+if [ ! -z "$SIDEKIQ_PID" ]; then
+    echo "✅ Sidekiq workers: Running. Example PID $SIDEKIQ_PID."
+    SIDEKIQ_RUNNING=true
+else
+    echo "❌ Sidekiq workers: Not running"
+fi
+
+echo ""
 echo "Related processes:"
 
 # Check for npm exec vite
@@ -37,6 +59,32 @@ fi
 RUBY_PID=$(ps aux | grep "ruby_lsp_rails" | grep -v grep | awk '{print $2}' | head -1)
 if [ ! -z "$RUBY_PID" ]; then
     echo "  🔧 ruby_lsp_rails language server, PID $RUBY_PID."
+fi
+
+echo ""
+# Docker status
+if command -v docker >/dev/null 2>&1; then
+    if docker info >/dev/null 2>&1; then
+        echo "🐳 Docker daemon: Running"
+        RUNNING_CONTAINERS=$(docker ps --format '{{.Names}}' | wc -l | tr -d ' ')
+        if [ "$RUNNING_CONTAINERS" -gt 0 ]; then
+            echo "  Containers running: $RUNNING_CONTAINERS"
+            DOCKER_REDIS=$(docker ps --filter "name=redis" --format '{{.Names}}' | paste -sd, -)
+            if [ ! -z "$DOCKER_REDIS" ]; then
+                echo "  🔴 redis containers: $DOCKER_REDIS"
+            fi
+            DOCKER_SIDEKIQ=$(docker ps --filter "name=sidekiq" --format '{{.Names}}' | paste -sd, -)
+            if [ ! -z "$DOCKER_SIDEKIQ" ]; then
+                echo "  🧰 sidekiq containers: $DOCKER_SIDEKIQ"
+            fi
+        else
+            echo "  No containers running."
+        fi
+    else
+        echo "🐳 Docker daemon: Not running"
+    fi
+else
+    echo "🐳 Docker: Not installed"
 fi
 
 echo ""
@@ -59,5 +107,15 @@ echo "  kas  # Kill all servers"
 
 echo ""
 echo "📋 To view server logs:"
-echo "  tail -f /tmp/rails.log  # Rails server"
-echo "  tail -f /tmp/vite.log   # Vite server"
+echo "  tail -f /tmp/rails.log        # Rails server"
+echo "  tail -f /tmp/vite.log         # Vite server"
+echo "  tail -f log/sidekiq.log       # Sidekiq (Rails app)"
+echo "  docker logs -f <sidekiq_name> # Sidekiq (Docker)"
+if [ -f /opt/homebrew/var/log/redis.log ]; then
+    echo "  tail -f /opt/homebrew/var/log/redis.log  # Redis (Homebrew)"
+elif [ -f /usr/local/var/log/redis.log ]; then
+    echo "  tail -f /usr/local/var/log/redis.log     # Redis (Homebrew)"
+else
+    echo "  redis-cli monitor              # Redis live command stream (fallback)"
+fi
+echo "  docker logs -f <redis_name>    # Redis (Docker)"
