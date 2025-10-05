@@ -283,3 +283,9 @@ alias krs="$HOME/code/AzCez/dotfiles/scripts/krs.sh"  # Kill Rails server only
 alias kvs="$HOME/code/AzCez/dotfiles/scripts/kvs.sh"  # Kill Vite server only
 alias rvs="$HOME/code/AzCez/dotfiles/scripts/rvs.sh"  # Start just Vite server
 alias kas="$HOME/code/AzCez/dotfiles/scripts/kas.sh"  # Kill all servers
+
+# Log tail aliases
+alias trs='tail -f /tmp/rails.log'        # Rails server logs
+alias tvs='tail -f /tmp/vite.log'         # Vite server logs
+alias trdsdok='docker logs -f'            # Redis (Docker) logs (usage: trdsdok <redis_name>)
+alias tsk='tail -f log/sidekiq.log'       # Sidekiq logs

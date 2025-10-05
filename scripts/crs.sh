@@ -107,15 +107,15 @@ echo "  kas  # Kill all servers"
 
 echo ""
 echo "📋 To view server logs:"
-echo "  tail -f /tmp/rails.log        # Rails server"
-echo "  tail -f /tmp/vite.log         # Vite server"
-echo "  tail -f log/sidekiq.log       # Sidekiq (Rails app)"
-echo "  docker logs -f <sidekiq_name> # Sidekiq (Docker)"
+echo "  tail -f /tmp/rails.log        # Rails server (trs)"
+echo "  tail -f /tmp/vite.log         # Vite server (tvs)"
+echo "  tail -f log/sidekiq.log       # Sidekiq (Rails app) (tsk)"
+echo "  docker logs -f <sidekiq_name> # Sidekiq (Docker) (tdok <sidekiq_name>)"
 if [ -f /opt/homebrew/var/log/redis.log ]; then
-    echo "  tail -f /opt/homebrew/var/log/redis.log  # Redis (Homebrew)"
+    echo "  tail -f /opt/homebrew/var/log/redis.log  # Redis (Homebrew) (trds)"
 elif [ -f /usr/local/var/log/redis.log ]; then
-    echo "  tail -f /usr/local/var/log/redis.log     # Redis (Homebrew)"
+    echo "  tail -f /usr/local/var/log/redis.log     # Redis (Homebrew) (trds)"
 else
     echo "  redis-cli monitor              # Redis live command stream (fallback)"
 fi
-echo "  docker logs -f <redis_name>    # Redis (Docker)"
+echo "  docker logs -f <redis_name>    # Redis (Docker) (trdsdok <redis_name>)"
