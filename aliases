@@ -32,6 +32,10 @@ alias kp='npx kill-port' #<PortNumber>
 #List running server
 alias wsr='lsof -nP +c 15 | grep LISTEN'
 
+# AI Factory Docker Compose alias
+# Usage: dl up, dl down, dl ps, dl logs, etc.
+alias dl='/Users/ces/code/AzCez/dotfiles/scripts/ai_factory/dl'
+
 # Server port 3000
 alias s3='rails s'
 
