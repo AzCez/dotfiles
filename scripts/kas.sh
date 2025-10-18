@@ -13,6 +13,14 @@ lsof -ti:3036 | xargs kill -9 2>/dev/null
 pkill -f "vite" 2>/dev/null
 pkill -f "npm exec vite" 2>/dev/null
 
+echo "Stopping Sidekiq workers..."
+pkill -f "bundle exec sidekiq" 2>/dev/null
+pkill -f "sidekiq" 2>/dev/null
+
+echo "Stopping Redis server (port 6379)..."
+lsof -ti:6379 | xargs kill -9 2>/dev/null
+pkill -f "redis-server" 2>/dev/null
+
 sleep 1
 
 echo ""
@@ -24,4 +32,4 @@ echo "  crs  # Check server status"
 echo "  krs  # Kill Rails server only"
 echo "  kvs  # Kill Vite server only"
 echo "  rvs  # Start just Vite server"
-echo "  kas  # Kill all servers (this command)"
+echo "  kas  # Kill all servers (Rails, Vite, Sidekiq, Redis)"
